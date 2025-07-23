@@ -7,12 +7,17 @@ const app = express();
 const server = createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:3000",
+    origin: ["http://localhost:3000", "https://michaelburg.github.io"],
     methods: ["GET", "POST"],
   },
 });
 
-app.use(cors());
+app.use(
+  cors({
+    origin: ["http://localhost:3000", "https://michaelburg.github.io"],
+    credentials: true,
+  })
+);
 app.use(express.json());
 
 interface GameState {
