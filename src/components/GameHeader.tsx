@@ -1,5 +1,6 @@
 import { memo, useCallback } from "react";
 import { Button } from "./ui/button.tsx";
+import { ExitConfirmationDialog } from "./ExitConfirmationDialog.tsx";
 import { GameMode } from "../App";
 
 interface GameHeaderProps {
@@ -46,13 +47,7 @@ export const GameHeader = memo(function GameHeader({
     <header className="bg-white shadow-sm border-b border-gray-200 p-4">
       <div className="max-w-lg mx-auto flex items-center justify-between">
         <div className="flex items-center space-x-4">
-          <Button
-            variant="ghost"
-            onClick={onBackToHome}
-            className="text-gray-600 hover:text-gray-900"
-          >
-            ← Back
-          </Button>
+          <ExitConfirmationDialog onConfirmExit={onBackToHome} />
           <div>
             <h1 className="text-xl font-bold text-gray-900">CoWordle</h1>
             <p className="text-sm text-gray-600">
