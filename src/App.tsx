@@ -46,7 +46,11 @@ function App() {
 
   useEffect(() => {
     if (gameMode === "multiplayer") {
-      const newSocket = io("http://localhost:3001");
+      const socketUrl =
+        import.meta.env.MODE === "production"
+          ? import.meta.env.VITE_SOCKET_PROD_URL
+          : import.meta.env.VITE_SOCKET_DEV_URL;
+      const newSocket = io(socketUrl);
       setSocket(newSocket);
 
       return () => {
