@@ -3,16 +3,25 @@ import { createServer } from "http";
 import { Server } from "socket.io";
 import cors from "cors";
 import words from "an-array-of-english-words";
+import dotenv from "dotenv";
+
+// Determine which .env file to load
+const envFile =
+  process.env.NODE_ENV === "production"
+    ? ".env.production"
+    : ".env.development";
+
+// Load the environment variables
+dotenv.config({ path: envFile });
 
 const app = express();
 const server = createServer(app);
-const allowedOrigins = "https://michaelburg.github.io";
+const allowedOrigins = process.env.VITE_APP_URL;
+console.log(allowedOrigins);
 const io = new Server(server, {
   cors: {
     origin: allowedOrigins,
     methods: ["GET", "POST"],
-    allowedHeaders: ["*"],
-    credentials: true,
   },
 });
 
