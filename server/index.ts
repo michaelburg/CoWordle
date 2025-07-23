@@ -20,14 +20,14 @@ const allowedOrigins = process.env.VITE_APP_URL;
 console.log(allowedOrigins);
 const io = new Server(server, {
   cors: {
-    origin: allowedOrigins,
+    origin: "*", // <-- allow all origins for testing
     methods: ["GET", "POST"],
   },
 });
 
 app.use(
   cors({
-    origin: allowedOrigins,
+    origin: "*", // <-- allow all origins for testing
     credentials: true,
   })
 );
