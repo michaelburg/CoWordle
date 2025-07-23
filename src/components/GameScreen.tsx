@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, memo, useMemo } from "react";
 import { Socket } from "socket.io-client";
 import { GameMode, GameState } from "../App";
 import { GameBoard } from "./GameBoard.tsx";
@@ -27,7 +27,7 @@ interface GameScreenProps {
   onBackToHome: () => void;
 }
 
-export function GameScreen({
+export const GameScreen = memo(function GameScreen({
   gameMode,
   playerName,
   socket,
@@ -64,14 +64,28 @@ export function GameScreen({
     [key: string]: "correct" | "present" | "absent" | null;
   }>({});
 
-  const isHost = Boolean(
-    gameMode === "multiplayer" && socket && multiplayerData.hostId === socket.id
+  const isHost = useMemo(
+    () =>
+      Boolean(
+        gameMode === "multiplayer" &&
+          socket &&
+          multiplayerData.hostId === socket.id
+      ),
+    [gameMode, socket, multiplayerData.hostId]
   );
-  const gameCanStart =
-    gameMode === "multiplayer" &&
-    multiplayerData.players.length === 2 &&
-    !multiplayerData.gameStarted;
-  const gameInProgress = gameMode === "solo" || multiplayerData.gameStarted;
+
+  const gameCanStart = useMemo(
+    () =>
+      gameMode === "multiplayer" &&
+      multiplayerData.players.length === 2 &&
+      !multiplayerData.gameStarted,
+    [gameMode, multiplayerData.players.length, multiplayerData.gameStarted]
+  );
+
+  const gameInProgress = useMemo(
+    () => gameMode === "solo" || multiplayerData.gameStarted,
+    [gameMode, multiplayerData.gameStarted]
+  );
 
   useEffect(() => {
     if (gameMode === "multiplayer" && socket && sessionId) {
@@ -113,13 +127,13 @@ export function GameScreen({
         socket.off("game-ended");
       };
     }
-  }, [gameMode, socket, sessionId, playerName]);
+  }, [gameMode, socket, sessionId, playerName, gameState.currentWord]);
 
-  const startGame = () => {
+  const startGame = useCallback(() => {
     if (isHost && socket && sessionId) {
       socket.emit("start-game", { sessionId });
     }
-  };
+  }, [isHost, socket, sessionId]);
 
   const updateKeyboardState = useCallback(
     (guess: string, result: Array<"correct" | "present" | "absent">) => {
@@ -144,7 +158,7 @@ export function GameScreen({
         return newKeyboardState;
       });
     },
-    [] // Remove keyboardState dependency to break circular re-renders
+    []
   );
 
   const handleKeyPress = useCallback(
@@ -196,7 +210,6 @@ export function GameScreen({
               return newGameState;
             }
           }
-          return currentState;
         } else if (key === "BACKSPACE") {
           return {
             ...currentState,
@@ -239,7 +252,7 @@ export function GameScreen({
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [handleKeyPress]);
 
-  const resetGame = () => {
+  const resetGame = useCallback(() => {
     setGameState({
       currentWord: getRandomWord(),
       guesses: [],
@@ -248,7 +261,7 @@ export function GameScreen({
       maxGuesses: 6,
     });
     setKeyboardState({});
-  };
+  }, []);
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
@@ -303,4 +316,4 @@ export function GameScreen({
       </div>
     </div>
   );
-}
+});

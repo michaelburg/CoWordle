@@ -1,8 +1,17 @@
-import { memo } from "react";
+import { memo, useCallback } from "react";
+
+interface KeyboardKeyProps {
+  char: string;
+  status: "correct" | "present" | "absent" | null;
+  onClick: (char: string) => void;
+  disabled?: boolean;
+}
 
 interface KeyboardProps {
   onKeyPress: (key: string) => void;
-  keyboardState: { [key: string]: "correct" | "present" | "absent" | null };
+  keyboardState: {
+    [key: string]: "correct" | "present" | "absent" | null;
+  };
   disabled?: boolean;
 }
 
@@ -17,53 +26,51 @@ const KeyboardKey = memo(function KeyboardKey({
   status,
   onClick,
   disabled = false,
-}: {
-  char: string;
-  status: "correct" | "present" | "absent" | null;
-  onClick: () => void;
-  disabled?: boolean;
-}) {
-  const getKeyClasses = () => {
-    let baseClasses =
-      "keyboard-key flex items-center justify-center rounded font-bold cursor-pointer select-none";
-
-    if (disabled) {
-      baseClasses += " opacity-50 cursor-not-allowed";
-    } else {
-      baseClasses += " hover:bg-gray-300";
-    }
-
-    if (char === "ENTER" || char === "BACKSPACE") {
-      baseClasses += " px-4 py-6 text-sm h-16";
-    } else {
-      baseClasses += " w-12 h-16 text-base";
-    }
-
+}: KeyboardKeyProps) {
+  const getStatusClasses = () => {
     switch (status) {
       case "correct":
-        return baseClasses + " bg-green-500 text-white border-green-500";
+        return "bg-green-500 border-green-500 text-white";
       case "present":
-        return baseClasses + " bg-yellow-500 text-white border-yellow-500";
+        return "bg-yellow-500 border-yellow-500 text-white";
       case "absent":
-        return baseClasses + " bg-gray-500 text-white border-gray-500";
+        return "bg-gray-500 border-gray-500 text-white";
       default:
-        return baseClasses + " bg-gray-200 text-gray-800 border-gray-300";
+        return "bg-gray-200 border-gray-300 text-gray-900 hover:bg-gray-300";
     }
   };
 
-  const getDisplayChar = () => {
-    if (char === "BACKSPACE") return "⌫";
-    if (char === "ENTER") return "ENTER";
+  const handleClick = useCallback(() => {
+    if (!disabled) {
+      onClick(char);
+    }
+  }, [char, onClick, disabled]);
+
+  const getKeyContent = () => {
+    if (char === "BACKSPACE") {
+      return "⌫";
+    }
     return char;
+  };
+
+  const getKeyWidth = () => {
+    if (char === "ENTER" || char === "BACKSPACE") {
+      return "px-4 min-w-[60px]";
+    }
+    return "w-8";
   };
 
   return (
     <button
-      className={getKeyClasses()}
-      onClick={disabled ? undefined : onClick}
+      onClick={handleClick}
       disabled={disabled}
+      className={`
+        ${getKeyWidth()} h-12 rounded border font-semibold text-sm transition-colors
+        ${getStatusClasses()}
+        ${disabled ? "opacity-50 cursor-not-allowed" : "active:scale-95"}
+      `}
     >
-      {getDisplayChar()}
+      {getKeyContent()}
     </button>
   );
 });
@@ -83,7 +90,7 @@ export const Keyboard = memo(function Keyboard({
                 key={key}
                 char={key}
                 status={keyboardState[key] || null}
-                onClick={() => onKeyPress(key)}
+                onClick={onKeyPress}
                 disabled={disabled}
               />
             ))}

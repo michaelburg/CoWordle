@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { GameScreen } from "./components/GameScreen.tsx";
 import { HomeScreen } from "./components/HomeScreen.tsx";
 import { io, Socket } from "socket.io-client";
@@ -54,27 +54,30 @@ function App() {
     }
   }, [gameMode]);
 
-  const startSoloGame = (name: string) => {
+  const startSoloGame = useCallback((name: string) => {
     setPlayerName(name);
     setGameMode("solo");
     setScreen("game");
-  };
+  }, []);
 
-  const startMultiplayerGame = (name: string, newSessionId: string) => {
+  const startMultiplayerGame = useCallback(
+    (name: string, newSessionId: string) => {
+      setPlayerName(name);
+      setSessionId(newSessionId);
+      setGameMode("multiplayer");
+      setScreen("game");
+
+      window.history.pushState({}, "", `?session=${newSessionId}`);
+    },
+    []
+  );
+
+  const joinGameWithName = useCallback((name: string) => {
     setPlayerName(name);
-    setSessionId(newSessionId);
-    setGameMode("multiplayer");
     setScreen("game");
+  }, []);
 
-    window.history.pushState({}, "", `?session=${newSessionId}`);
-  };
-
-  const joinGameWithName = (name: string) => {
-    setPlayerName(name);
-    setScreen("game");
-  };
-
-  const backToHome = () => {
+  const backToHome = useCallback(() => {
     setScreen("home");
     setGameMode("solo");
     setPlayerName("");
@@ -84,7 +87,7 @@ function App() {
       setSocket(null);
     }
     window.history.replaceState({}, "", window.location.pathname);
-  };
+  }, [socket]);
 
   return (
     <div className="min-h-screen bg-background">

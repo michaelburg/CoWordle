@@ -1,4 +1,4 @@
-import { useState, useCallback, memo } from "react";
+import { useState, useCallback, memo, useMemo } from "react";
 import { generateSessionId } from "@/lib/utils";
 import { GameGrid } from "./GameBoard.tsx";
 import { Keyboard } from "./Keyboard.tsx";
@@ -11,7 +11,6 @@ interface HomeScreenProps {
   sessionId?: string | null;
 }
 
-// Memoized decorative components that don't need to re-render when playerName changes
 const DecorativeGameGrid = memo(function DecorativeGameGrid() {
   return (
     <div className="mb-8 flex justify-center">
@@ -28,7 +27,7 @@ const DecorativeKeyboard = memo(function DecorativeKeyboard() {
   );
 });
 
-export function HomeScreen({
+export const HomeScreen = memo(function HomeScreen({
   onStartSolo,
   onStartMultiplayer,
   onJoinSession,
@@ -39,14 +38,16 @@ export function HomeScreen({
   );
 
   const handleStartSolo = useCallback(() => {
-    if (!playerName.trim()) return;
-    localStorage.setItem("playerName", playerName.trim());
-    onStartSolo(playerName.trim());
+    const trimmedName = playerName.trim();
+    if (!trimmedName) return;
+    localStorage.setItem("playerName", trimmedName);
+    onStartSolo(trimmedName);
   }, [playerName, onStartSolo]);
 
   const handleInviteFriend = useCallback(() => {
-    if (!playerName.trim()) return;
-    localStorage.setItem("playerName", playerName.trim());
+    const trimmedName = playerName.trim();
+    if (!trimmedName) return;
+    localStorage.setItem("playerName", trimmedName);
 
     const newSessionId = generateSessionId();
     const inviteLink = `${window.location.origin}?session=${newSessionId}`;
@@ -55,30 +56,37 @@ export function HomeScreen({
     alert("Invite link copied to clipboard! You'll now join as the host.");
 
     if (onStartMultiplayer) {
-      onStartMultiplayer(playerName.trim(), newSessionId);
+      onStartMultiplayer(trimmedName, newSessionId);
     }
   }, [playerName, onStartMultiplayer]);
 
   const handleJoinSession = useCallback(() => {
-    if (!playerName.trim()) return;
-    localStorage.setItem("playerName", playerName.trim());
+    const trimmedName = playerName.trim();
+    if (!trimmedName) return;
+    localStorage.setItem("playerName", trimmedName);
 
     if (onJoinSession) {
-      onJoinSession(playerName.trim());
+      onJoinSession(trimmedName);
     }
   }, [playerName, onJoinSession]);
+
+  const headerText = useMemo(
+    () => ({
+      title: sessionId ? "Join the game!" : "Multiplayer Wordle Game",
+      sessionInfo: sessionId ? `Session: ${sessionId.slice(0, 8)}...` : null,
+    }),
+    [sessionId]
+  );
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-gray-900 mb-2">CoWordle</h1>
-          <p className="text-gray-600">
-            {sessionId ? "Join the game!" : "Multiplayer Wordle Game"}
-          </p>
-          {sessionId && (
+          <p className="text-gray-600">{headerText.title}</p>
+          {headerText.sessionInfo && (
             <p className="text-sm text-gray-500 mt-2">
-              Session: {sessionId.slice(0, 8)}...
+              {headerText.sessionInfo}
             </p>
           )}
         </div>
@@ -98,4 +106,4 @@ export function HomeScreen({
       </div>
     </div>
   );
-}
+});
