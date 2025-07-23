@@ -6,9 +6,10 @@ import words from "an-array-of-english-words";
 
 const app = express();
 const server = createServer(app);
+const allowedOrigins = "https://michaelburg.github.io";
 const io = new Server(server, {
   cors: {
-    origin: ["http://localhost:3000", "https://michaelburg.github.io"],
+    origin: allowedOrigins,
     methods: ["GET", "POST"],
     allowedHeaders: ["*"],
     credentials: true,
@@ -17,7 +18,7 @@ const io = new Server(server, {
 
 app.use(
   cors({
-    origin: ["http://localhost:3000", "https://michaelburg.github.io"],
+    origin: allowedOrigins,
     credentials: true,
   })
 );
