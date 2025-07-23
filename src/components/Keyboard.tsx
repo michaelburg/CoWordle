@@ -34,9 +34,9 @@ const KeyboardKey = memo(function KeyboardKey({
     }
 
     if (char === "ENTER" || char === "BACKSPACE") {
-      baseClasses += " px-3 py-4 text-xs h-12";
+      baseClasses += " px-4 py-6 text-sm h-16";
     } else {
-      baseClasses += " w-10 h-12 text-sm";
+      baseClasses += " w-12 h-16 text-base";
     }
 
     switch (status) {
@@ -74,10 +74,10 @@ export const Keyboard = memo(function Keyboard({
   disabled = false,
 }: KeyboardProps) {
   return (
-    <div className="w-full max-w-lg mx-auto px-2">
-      <div className="space-y-2">
+    <div className="w-full max-w-2xl mx-auto px-2">
+      <div className="space-y-3">
         {KEYBOARD_LAYOUT.map((row, rowIndex) => (
-          <div key={rowIndex} className="flex justify-center gap-1">
+          <div key={rowIndex} className="flex justify-center gap-2">
             {row.map((key) => (
               <KeyboardKey
                 key={key}

@@ -263,7 +263,7 @@ export function GameScreen({
         gameCanStart={gameCanStart}
       />
 
-      <div className="flex-1 flex flex-col items-center justify-center p-4 max-w-lg mx-auto w-full">
+      <div className="flex-1 flex flex-col items-center px-4 pt-2 pb-4 max-w-2xl mx-auto w-full">
         <GameLoadingState
           gameMode={gameMode}
           gameStarted={multiplayerData.gameStarted}
@@ -272,11 +272,13 @@ export function GameScreen({
         />
 
         {gameInProgress && (
-          <GameBoard
-            gameState={gameState}
-            gameMode={gameMode}
-            multiplayerData={multiplayerData}
-          />
+          <div className="my-auto">
+            <GameBoard
+              gameState={gameState}
+              gameMode={gameMode}
+              multiplayerData={multiplayerData}
+            />
+          </div>
         )}
 
         <GameEndMessage
@@ -288,13 +290,15 @@ export function GameScreen({
         />
 
         {gameInProgress && (
-          <Keyboard
-            onKeyPress={handleKeyPress}
-            keyboardState={keyboardState}
-            disabled={
-              gameState.gameStatus !== "playing" || multiplayerData.gameEnded
-            }
-          />
+          <div className="mt-auto w-full">
+            <Keyboard
+              onKeyPress={handleKeyPress}
+              keyboardState={keyboardState}
+              disabled={
+                gameState.gameStatus !== "playing" || multiplayerData.gameEnded
+              }
+            />
+          </div>
         )}
       </div>
     </div>

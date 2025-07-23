@@ -48,8 +48,8 @@ const Tile = memo(function Tile({
   return (
     <div
       className={`
-        w-12 h-12 border-2 rounded-sm flex items-center justify-center
-        text-lg font-bold uppercase transition-all duration-300
+        w-16 h-16 border-2 rounded-sm flex items-center justify-center
+        text-xl font-bold uppercase transition-all duration-300
         ${getStatusClasses()}
         ${animate ? "animate-flip" : ""}
       `}
@@ -75,9 +75,9 @@ export const GameGrid = memo(function GameGrid({
     );
 
     return (
-      <div className="grid grid-rows-6 gap-1">
+      <div className="grid grid-rows-6 gap-2">
         {displayRows.map((row, rowIndex) => (
-          <div key={rowIndex} className="grid grid-cols-5 gap-1">
+          <div key={rowIndex} className="grid grid-cols-5 gap-2">
             {row.map((tile, colIndex) => (
               <Tile
                 key={`${rowIndex}-${colIndex}`}
@@ -121,9 +121,9 @@ export const GameGrid = memo(function GameGrid({
   });
 
   return (
-    <div className="grid grid-rows-6 gap-1">
+    <div className="grid grid-rows-6 gap-2">
       {rows.map((row, rowIndex) => (
-        <div key={rowIndex} className="grid grid-cols-5 gap-1">
+        <div key={rowIndex} className="grid grid-cols-5 gap-2">
           {row.map((tile, colIndex) => (
             <Tile
               key={`${rowIndex}-${colIndex}`}
