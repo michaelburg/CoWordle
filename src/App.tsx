@@ -48,8 +48,8 @@ function App() {
     if (gameMode === "multiplayer") {
       const socketUrl =
         import.meta.env.MODE === "production"
-          ? import.meta.env.VITE_SOCKET_PROD_URL
-          : import.meta.env.VITE_SOCKET_DEV_URL;
+          ? import.meta.env.production.VITE_SOCKET_URL
+          : import.meta.env.development.VITE_SOCKET_URL;
       console.log(socketUrl);
       const newSocket = io(socketUrl);
       setSocket(newSocket);

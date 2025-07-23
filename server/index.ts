@@ -2,6 +2,7 @@ import express from "express";
 import { createServer } from "http";
 import { Server } from "socket.io";
 import cors from "cors";
+import words from "an-array-of-english-words";
 
 const app = express();
 const server = createServer(app);
@@ -60,111 +61,14 @@ const cleanupSessions = () => {
 
 setInterval(cleanupSessions, 60 * 60 * 1000);
 
-const WORD_LIST = [
-  "ABOUT",
-  "ABOVE",
-  "ABUSE",
-  "ACTOR",
-  "ACUTE",
-  "ADMIT",
-  "ADOPT",
-  "ADULT",
-  "AFTER",
-  "AGAIN",
-  "AGENT",
-  "AGREE",
-  "AHEAD",
-  "ALARM",
-  "ALBUM",
-  "ALERT",
-  "ALIEN",
-  "ALIGN",
-  "ALIKE",
-  "ALIVE",
-  "ALLOW",
-  "ALONE",
-  "ALONG",
-  "ALTER",
-  "AMONG",
-  "ANGER",
-  "ANGLE",
-  "ANGRY",
-  "APART",
-  "APPLE",
-  "APPLY",
-  "ARENA",
-  "ARGUE",
-  "ARISE",
-  "ARRAY",
-  "ASIDE",
-  "ASSET",
-  "AUDIO",
-  "AUDIT",
-  "AVOID",
-  "AWARD",
-  "AWARE",
-  "BADLY",
-  "BAKER",
-  "BASES",
-  "BASIC",
-  "BEACH",
-  "BEGAN",
-  "BEGIN",
-  "BEING",
-  "BELOW",
-  "BENCH",
-  "BILLY",
-  "BIRTH",
-  "BLACK",
-  "BLAME",
-  "BLANK",
-  "BLIND",
-  "BLOCK",
-  "BLOOD",
-  "BOARD",
-  "BOOST",
-  "BOOTH",
-  "BOUND",
-  "BRAIN",
-  "BRAND",
-  "BRAVE",
-  "BREAD",
-  "BREAK",
-  "BREED",
-  "BRIEF",
-  "BRING",
-  "BROAD",
-  "BROKE",
-  "BROWN",
-  "BUILD",
-  "BUILT",
-  "BUYER",
-  "CABLE",
-  "CALIF",
-  "CARRY",
-  "CATCH",
-  "CAUSE",
-  "CHAIN",
-  "CHAIR",
-  "CHAOS",
-  "CHARM",
-  "CHART",
-  "CHASE",
-  "CHEAP",
-  "CHECK",
-  "CHEST",
-  "CHIEF",
-  "CHILD",
-  "CHINA",
-  "CHOSE",
-  "CIVIL",
-  "CLAIM",
-  "CLASS",
-  "CLEAN",
-];
+const FIVE_LETTER_WORDS = words
+  .filter((word) => word.length === 5)
+  .map((word) => word.toUpperCase());
 
 function getRandomWord(): string {
-  return WORD_LIST[Math.floor(Math.random() * WORD_LIST.length)];
+  return FIVE_LETTER_WORDS[
+    Math.floor(Math.random() * FIVE_LETTER_WORDS.length)
+  ];
 }
 
 io.on("connection", (socket) => {
