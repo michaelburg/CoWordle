@@ -16,7 +16,7 @@ This project is configured for automatic deployment to GitHub Pages using GitHub
 
 3. **Automatic Deployment**:
 
-   - The GitHub Action will automatically deploy when you push to the `main` branch
+   - The GitHub Action will automatically deploy when you push to the `master` branch
    - You can monitor the deployment in the "Actions" tab of your repository
 
 4. **Manual Deployment** (if needed):
@@ -44,7 +44,7 @@ To enable multiplayer functionality, deploy the server to a platform that suppor
 
 1. Install Heroku CLI
 2. Create app: `heroku create your-app-name`
-3. Deploy: `git push heroku main`
+3. Deploy: `git push heroku master`
 
 #### Option 3: Vercel
 
