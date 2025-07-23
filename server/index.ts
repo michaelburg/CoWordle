@@ -10,6 +10,8 @@ const io = new Server(server, {
   cors: {
     origin: ["http://localhost:3000", "https://michaelburg.github.io"],
     methods: ["GET", "POST"],
+    allowedHeaders: ["*"],
+    credentials: true,
   },
 });
 
