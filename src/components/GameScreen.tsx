@@ -123,25 +123,28 @@ export function GameScreen({
 
   const updateKeyboardState = useCallback(
     (guess: string, result: Array<"correct" | "present" | "absent">) => {
-      const newKeyboardState = { ...keyboardState };
+      setKeyboardState((prevKeyboardState) => {
+        const newKeyboardState = { ...prevKeyboardState };
 
-      for (let i = 0; i < guess.length; i++) {
-        const letter = guess[i].toUpperCase();
-        const letterResult = result[i];
+        for (let i = 0; i < guess.length; i++) {
+          const letter = guess[i].toUpperCase();
+          const letterResult = result[i];
 
-        if (
-          !newKeyboardState[letter] ||
-          (newKeyboardState[letter] === "absent" &&
-            letterResult !== "absent") ||
-          (newKeyboardState[letter] === "present" && letterResult === "correct")
-        ) {
-          newKeyboardState[letter] = letterResult;
+          if (
+            !newKeyboardState[letter] ||
+            (newKeyboardState[letter] === "absent" &&
+              letterResult !== "absent") ||
+            (newKeyboardState[letter] === "present" &&
+              letterResult === "correct")
+          ) {
+            newKeyboardState[letter] = letterResult;
+          }
         }
-      }
 
-      setKeyboardState(newKeyboardState);
+        return newKeyboardState;
+      });
     },
-    [keyboardState]
+    [] // Remove keyboardState dependency to break circular re-renders
   );
 
   const handleKeyPress = useCallback(

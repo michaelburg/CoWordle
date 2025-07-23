@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useCallback, memo } from "react";
 import { generateSessionId } from "@/lib/utils";
 import { GameGrid } from "./GameBoard.tsx";
 import { Keyboard } from "./Keyboard.tsx";
@@ -11,6 +11,23 @@ interface HomeScreenProps {
   sessionId?: string | null;
 }
 
+// Memoized decorative components that don't need to re-render when playerName changes
+const DecorativeGameGrid = memo(function DecorativeGameGrid() {
+  return (
+    <div className="mb-8 flex justify-center">
+      <GameGrid />
+    </div>
+  );
+});
+
+const DecorativeKeyboard = memo(function DecorativeKeyboard() {
+  return (
+    <div className="mt-8">
+      <Keyboard onKeyPress={() => {}} keyboardState={{}} disabled={true} />
+    </div>
+  );
+});
+
 export function HomeScreen({
   onStartSolo,
   onStartMultiplayer,
@@ -21,13 +38,13 @@ export function HomeScreen({
     localStorage.getItem("playerName") || ""
   );
 
-  const handleStartSolo = () => {
+  const handleStartSolo = useCallback(() => {
     if (!playerName.trim()) return;
     localStorage.setItem("playerName", playerName.trim());
     onStartSolo(playerName.trim());
-  };
+  }, [playerName, onStartSolo]);
 
-  const handleInviteFriend = () => {
+  const handleInviteFriend = useCallback(() => {
     if (!playerName.trim()) return;
     localStorage.setItem("playerName", playerName.trim());
 
@@ -40,16 +57,16 @@ export function HomeScreen({
     if (onStartMultiplayer) {
       onStartMultiplayer(playerName.trim(), newSessionId);
     }
-  };
+  }, [playerName, onStartMultiplayer]);
 
-  const handleJoinSession = () => {
+  const handleJoinSession = useCallback(() => {
     if (!playerName.trim()) return;
     localStorage.setItem("playerName", playerName.trim());
 
     if (onJoinSession) {
       onJoinSession(playerName.trim());
     }
-  };
+  }, [playerName, onJoinSession]);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
@@ -66,9 +83,7 @@ export function HomeScreen({
           )}
         </div>
 
-        <div className="mb-8 flex justify-center">
-          <GameGrid />
-        </div>
+        <DecorativeGameGrid />
 
         <PlayerForm
           playerName={playerName}
@@ -79,9 +94,7 @@ export function HomeScreen({
           sessionId={sessionId}
         />
 
-        <div className="mt-8">
-          <Keyboard onKeyPress={() => {}} keyboardState={{}} disabled={true} />
-        </div>
+        <DecorativeKeyboard />
       </div>
     </div>
   );

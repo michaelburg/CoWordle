@@ -1,3 +1,5 @@
+import { memo } from "react";
+
 interface KeyboardProps {
   onKeyPress: (key: string) => void;
   keyboardState: { [key: string]: "correct" | "present" | "absent" | null };
@@ -10,7 +12,7 @@ const KEYBOARD_LAYOUT = [
   ["ENTER", "Z", "X", "C", "V", "B", "N", "M", "BACKSPACE"],
 ];
 
-function KeyboardKey({
+const KeyboardKey = memo(function KeyboardKey({
   char,
   status,
   onClick,
@@ -64,9 +66,9 @@ function KeyboardKey({
       {getDisplayChar()}
     </button>
   );
-}
+});
 
-export function Keyboard({
+export const Keyboard = memo(function Keyboard({
   onKeyPress,
   keyboardState,
   disabled = false,
@@ -90,4 +92,4 @@ export function Keyboard({
       </div>
     </div>
   );
-}
+});

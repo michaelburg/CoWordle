@@ -1,3 +1,4 @@
+import { memo, useCallback } from "react";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 
@@ -10,7 +11,7 @@ interface PlayerFormProps {
   sessionId?: string | null;
 }
 
-export function PlayerForm({
+export const PlayerForm = memo(function PlayerForm({
   playerName,
   onPlayerNameChange,
   onStartSolo,
@@ -18,15 +19,18 @@ export function PlayerForm({
   onJoinSession,
   sessionId,
 }: PlayerFormProps) {
-  const handleKeyDown = (event: React.KeyboardEvent) => {
-    if (event.key === "Enter") {
-      if (sessionId && onJoinSession) {
-        onJoinSession();
-      } else {
-        onStartSolo();
+  const handleKeyDown = useCallback(
+    (event: React.KeyboardEvent) => {
+      if (event.key === "Enter") {
+        if (sessionId && onJoinSession) {
+          onJoinSession();
+        } else {
+          onStartSolo();
+        }
       }
-    }
-  };
+    },
+    [sessionId, onJoinSession, onStartSolo]
+  );
 
   return (
     <>
@@ -74,4 +78,4 @@ export function PlayerForm({
       </div>
     </>
   );
-}
+});

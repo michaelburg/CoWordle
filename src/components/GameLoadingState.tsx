@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { GameMode } from "../App";
 
 interface GameLoadingStateProps {
@@ -7,7 +8,7 @@ interface GameLoadingStateProps {
   isHost: boolean;
 }
 
-export function GameLoadingState({
+export const GameLoadingState = memo(function GameLoadingState({
   gameMode,
   gameStarted,
   playerCount,
@@ -42,4 +43,4 @@ export function GameLoadingState({
       )}
     </div>
   );
-}
+});

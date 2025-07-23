@@ -1,3 +1,4 @@
+import { memo, useCallback } from "react";
 import { Button } from "./ui/button.tsx";
 import { GameMode } from "../App";
 
@@ -23,7 +24,7 @@ interface GameHeaderProps {
   gameCanStart?: boolean;
 }
 
-export function GameHeader({
+export const GameHeader = memo(function GameHeader({
   gameMode,
   playerName,
   sessionId,
@@ -33,13 +34,13 @@ export function GameHeader({
   onStartGame,
   gameCanStart = false,
 }: GameHeaderProps) {
-  const copySessionLink = () => {
+  const copySessionLink = useCallback(() => {
     if (sessionId) {
       const link = `${window.location.origin}?session=${sessionId}`;
       navigator.clipboard.writeText(link);
       alert("Session link copied to clipboard!");
     }
-  };
+  }, [sessionId]);
 
   return (
     <header className="bg-white shadow-sm border-b border-gray-200 p-4">
@@ -103,4 +104,4 @@ export function GameHeader({
       </div>
     </header>
   );
-}
+});

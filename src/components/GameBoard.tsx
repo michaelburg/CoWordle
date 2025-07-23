@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { GameState, GameMode } from "../App";
 import { checkGuess } from "@/lib/utils";
 
@@ -24,7 +25,11 @@ interface TileProps {
   animate?: boolean;
 }
 
-function Tile({ letter, status, animate = false }: TileProps) {
+const Tile = memo(function Tile({
+  letter,
+  status,
+  animate = false,
+}: TileProps) {
   const getStatusClasses = () => {
     switch (status) {
       case "correct":
@@ -52,9 +57,9 @@ function Tile({ letter, status, animate = false }: TileProps) {
       {letter}
     </div>
   );
-}
+});
 
-export function GameGrid({
+export const GameGrid = memo(function GameGrid({
   gameState,
   isOpponent = false,
 }: {
@@ -134,9 +139,9 @@ export function GameGrid({
       ))}
     </div>
   );
-}
+});
 
-export function GameBoard({
+export const GameBoard = memo(function GameBoard({
   gameState,
   gameMode,
   multiplayerData,
@@ -182,4 +187,4 @@ export function GameBoard({
       )}
     </div>
   );
-}
+});

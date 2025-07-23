@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { GameMode, GameState } from "../App";
 
 interface GameEndMessageProps {
@@ -20,7 +21,7 @@ interface GameEndMessageProps {
   onPlayAgain?: () => void;
 }
 
-export function GameEndMessage({
+export const GameEndMessage = memo(function GameEndMessage({
   gameMode,
   gameState,
   multiplayerData,
@@ -74,19 +75,22 @@ export function GameEndMessage({
     );
   }
 
-  if (multiplayerData.gameEnded) {
+  if (gameMode === "multiplayer") {
     const endMessage = getMultiplayerEndMessage();
-    return endMessage ? (
-      <div className="my-6 text-center">
-        <div className="text-2xl font-bold mb-2">{endMessage.title}</div>
-        <div className="text-lg mb-4">{endMessage.subtitle}</div>
-        <div className="text-lg">
-          The word was:{" "}
-          <span className="font-bold">{gameState.currentWord}</span>
+
+    if (endMessage) {
+      return (
+        <div className="my-6 text-center">
+          <div className="text-2xl font-bold mb-2">{endMessage.title}</div>
+          <div className="text-lg mb-4">{endMessage.subtitle}</div>
+          <div className="text-sm text-gray-600">
+            The word was:{" "}
+            <span className="font-bold">{gameState.currentWord}</span>
+          </div>
         </div>
-      </div>
-    ) : null;
+      );
+    }
   }
 
   return null;
-}
+});
