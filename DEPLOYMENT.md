@@ -28,7 +28,7 @@ This project is configured for automatic deployment to GitHub Pages using GitHub
 
 - **Solo Mode Only**: GitHub Pages only serves static files, so only the solo game mode will work
 - **Multiplayer Mode**: For full multiplayer functionality, you'll need to deploy the server component separately (see Server Deployment section below)
-- **URL**: Your game will be available at `https://yourusername.github.io/cowordle/`
+- **URL**: Your game will be available at `https://yourusername.github.io/CoWordle/`
 
 ### Server Deployment (for Multiplayer)
 
