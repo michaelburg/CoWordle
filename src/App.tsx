@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { GameScreen } from "./components/GameScreen.tsx";
 import { HomeScreen } from "./components/HomeScreen.tsx";
+import { Toaster } from "./components/ui/toaster.tsx";
 import { io, Socket } from "socket.io-client";
 
 export type GameMode = "solo" | "multiplayer";
@@ -107,6 +108,7 @@ function App() {
           onBackToHome={backToHome}
         />
       )}
+      <Toaster />
     </div>
   );
 }

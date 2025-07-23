@@ -3,6 +3,7 @@ import { generateSessionId } from "@/lib/utils";
 import { GameGrid } from "./GameBoard.tsx";
 import { Keyboard } from "./Keyboard.tsx";
 import { PlayerForm } from "./PlayerForm.tsx";
+import { useToast } from "@/hooks/use-toast";
 
 interface HomeScreenProps {
   onStartSolo: (name: string) => void;
@@ -36,6 +37,7 @@ export const HomeScreen = memo(function HomeScreen({
   const [playerName, setPlayerName] = useState(
     localStorage.getItem("playerName") || ""
   );
+  const { toast } = useToast();
 
   const handleStartSolo = useCallback(() => {
     const trimmedName = playerName.trim();
@@ -53,12 +55,16 @@ export const HomeScreen = memo(function HomeScreen({
     const inviteLink = `${window.location.origin}?session=${newSessionId}`;
 
     navigator.clipboard.writeText(inviteLink);
-    alert("Invite link copied to clipboard! You'll now join as the host.");
+    toast({
+      title: "Link copied!",
+      description:
+        "Invite link copied to clipboard. You'll now join as the host.",
+    });
 
     if (onStartMultiplayer) {
       onStartMultiplayer(trimmedName, newSessionId);
     }
-  }, [playerName, onStartMultiplayer]);
+  }, [playerName, onStartMultiplayer, toast]);
 
   const handleJoinSession = useCallback(() => {
     const trimmedName = playerName.trim();

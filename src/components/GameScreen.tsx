@@ -7,6 +7,7 @@ import { GameHeader } from "./GameHeader.tsx";
 import { GameLoadingState } from "./GameLoadingState.tsx";
 import { GameEndMessage } from "./GameEndMessage.tsx";
 import { checkGuess, isValidWord } from "@/lib/utils";
+import { useToast } from "@/hooks/use-toast";
 import words from "an-array-of-english-words";
 
 const FIVE_LETTER_WORDS = words
@@ -63,6 +64,8 @@ export const GameScreen = memo(function GameScreen({
   const [keyboardState, setKeyboardState] = useState<{
     [key: string]: "correct" | "present" | "absent" | null;
   }>({});
+
+  const { toast } = useToast();
 
   const isHost = useMemo(
     () =>
@@ -168,6 +171,14 @@ export const GameScreen = memo(function GameScreen({
           return currentState;
 
         if (key === "ENTER") {
+          if (currentState.currentGuess.length < 5) {
+            toast({
+              variant: "destructive",
+              title: "Word too short",
+              description: "Please enter a 5-letter word.",
+            });
+            return currentState;
+          }
           if (currentState.currentGuess.length === 5) {
             if (isValidWord(currentState.currentGuess)) {
               const result = checkGuess(
@@ -208,6 +219,14 @@ export const GameScreen = memo(function GameScreen({
               }
 
               return newGameState;
+            } else {
+              // Show toast for invalid word
+              toast({
+                variant: "destructive",
+                title: "Invalid word",
+                description: "That's not a valid word. Try again!",
+              });
+              return currentState;
             }
           }
         } else if (key === "BACKSPACE") {
@@ -232,6 +251,7 @@ export const GameScreen = memo(function GameScreen({
       playerName,
       updateKeyboardState,
       gameInProgress,
+      toast,
     ]
   );
 

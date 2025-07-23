@@ -2,6 +2,7 @@ import { memo, useCallback } from "react";
 import { Button } from "./ui/button.tsx";
 import { ExitConfirmationDialog } from "./ExitConfirmationDialog.tsx";
 import { GameMode } from "../App";
+import { useToast } from "@/hooks/use-toast";
 
 interface GameHeaderProps {
   gameMode: GameMode;
@@ -35,13 +36,18 @@ export const GameHeader = memo(function GameHeader({
   onStartGame,
   gameCanStart = false,
 }: GameHeaderProps) {
+  const { toast } = useToast();
+
   const copySessionLink = useCallback(() => {
     if (sessionId) {
-      const link = `${window.location.origin}?session=${sessionId}`;
+      const link = `${window.location.origin}${window.location.pathname}?session=${sessionId}`;
       navigator.clipboard.writeText(link);
-      alert("Session link copied to clipboard!");
+      toast({
+        title: "Link copied!",
+        description: "Session link copied to clipboard!",
+      });
     }
-  }, [sessionId]);
+  }, [sessionId, toast]);
 
   return (
     <header className="bg-white shadow-sm border-b border-gray-200 p-4">
