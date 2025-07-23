@@ -40,8 +40,7 @@ export const GameHeader = memo(function GameHeader({
 
   const copySessionLink = useCallback(() => {
     if (sessionId) {
-      const link = `${window.location.origin}${window.location.pathname}?session=${sessionId}`;
-      navigator.clipboard.writeText(link);
+      navigator.clipboard.writeText(window.location.href);
       toast({
         title: "Link copied!",
         description: "Session link copied to clipboard!",

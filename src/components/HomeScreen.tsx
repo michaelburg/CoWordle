@@ -52,7 +52,7 @@ export const HomeScreen = memo(function HomeScreen({
     localStorage.setItem("playerName", trimmedName);
 
     const newSessionId = generateSessionId();
-    const inviteLink = `${window.location.origin}?session=${newSessionId}`;
+    const inviteLink = `${window.location.href}?session=${newSessionId}`;
 
     navigator.clipboard.writeText(inviteLink);
     toast({
