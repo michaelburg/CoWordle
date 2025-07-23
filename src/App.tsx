@@ -48,7 +48,7 @@ function App() {
     if (gameMode === "multiplayer") {
       const socketUrl = import.meta.env.VITE_SOCKET_URL;
       console.log(socketUrl);
-      const newSocket = io(socketUrl);
+      const newSocket = io(socketUrl, { transports: ["websocket"] });
       setSocket(newSocket);
 
       return () => {
