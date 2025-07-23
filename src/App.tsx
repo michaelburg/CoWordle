@@ -47,7 +47,10 @@ function App() {
   useEffect(() => {
     if (gameMode === "multiplayer") {
       const socketUrl = import.meta.env.VITE_SOCKET_URL;
-      const newSocket = io(socketUrl);
+      const newSocket = io(socketUrl, {
+        transports: ["websocket", "polling"],
+        withCredentials: true,
+      });
       setSocket(newSocket);
 
       return () => {
