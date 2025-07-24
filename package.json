@@ -2,7 +2,7 @@
   "name": "cowordle",
   "version": "1.0.0",
   "description": "Multiplayer Wordle game with WebSocket support",
-  "main": "server/index.js",
+  "main": "dist/index.js",
   "scripts": {
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "client": "vite",
@@ -12,7 +12,7 @@
     "preview": "vite preview",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist",
-    "start:prod": "NODE_ENV=production tsx server/index.ts",
+    "start:prod": "NODE_ENV=production node dist/index.js",
     "start": "node dist/index.js"
   },
   "dependencies": {
