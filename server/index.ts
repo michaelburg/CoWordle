@@ -71,8 +71,8 @@ const cleanupSessions = () => {
 setInterval(cleanupSessions, 60 * 60 * 1000);
 
 const FIVE_LETTER_WORDS = words
-  .filter((word) => word.length === 5)
-  .map((word) => word.toUpperCase());
+  .filter((word: string) => word.length === 5)
+  .map((word: string) => word.toUpperCase());
 
 function getRandomWord(): string {
   return FIVE_LETTER_WORDS[
@@ -240,7 +240,7 @@ io.on("connection", (socket) => {
   });
 });
 
-app.get("/health", (_req, res) => {
+app.get("/health", (_req: express.Request, res: express.Response) => {
   res.json({ status: "OK", sessions: gameSessions.size });
 });
 
