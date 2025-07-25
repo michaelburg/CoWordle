@@ -32,9 +32,6 @@ export const GameHeader = memo(function GameHeader({
   sessionId,
   multiplayerData,
   onBackToHome,
-  isHost = false,
-  onStartGame,
-  gameCanStart = false,
 }: GameHeaderProps) {
   const { toast } = useToast();
 
@@ -49,58 +46,70 @@ export const GameHeader = memo(function GameHeader({
   }, [sessionId, toast]);
 
   return (
-    <header className="bg-white shadow-sm border-b border-gray-200 p-4">
-      <div className="max-w-lg mx-auto flex items-center justify-between">
-        <div className="flex items-center space-x-4">
+    <header className="bg-white shadow-sm border-b border-gray-200">
+      <div className="w-full grid grid-cols-3 items-center p-1">
+        {/* Left section */}
+        <div className="flex flex-col w-auto max-w-max">
           <ExitConfirmationDialog onConfirmExit={onBackToHome} />
-          <div>
-            <h1 className="text-xl font-bold text-gray-900">CoWordle</h1>
-            <p className="text-sm text-gray-600">
-              {gameMode === "solo" ? "Solo Game" : "Multiplayer Game"}
-            </p>
-          </div>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={copySessionLink}
+            className="text-xs"
+          >
+            Copy Link
+          </Button>
         </div>
 
-        <div className="flex items-center space-x-4">
-          {gameMode === "multiplayer" && isHost && gameCanStart && (
-            <Button
-              onClick={onStartGame}
-              className="bg-green-600 hover:bg-green-700 text-white"
-            >
-              Start Game
-            </Button>
-          )}
+        {/* Center section */}
+        <div className="flex flex-col items-center">
+          <h1 className="text-2xl font-bold text-gray-900">CoWordle</h1>
+          <p className="text-sm text-gray-600">
+            {gameMode === "solo" ? "Solo Game" : "Multiplayer Game"}
+          </p>
+        </div>
 
-          {gameMode === "multiplayer" && sessionId && (
-            <div className="text-right">
-              <div className="text-sm font-medium text-gray-900">
-                Players: {multiplayerData.players.length}/2
-                {isHost && (
-                  <span className="ml-1 text-xs text-blue-600">(Host)</span>
-                )}
-              </div>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={copySessionLink}
-                className="text-xs"
-              >
-                Copy Link
-              </Button>
+        {/* Right section */}
+        {gameMode === "multiplayer" && sessionId && (
+          <div className="flex flex-col min-w-[160px]">
+            <div className="text-sm font-medium text-gray-900 mb-1">
+              Players:{" "}
+              <span className="font-bold">
+                {multiplayerData.players.length}
+              </span>
             </div>
-          )}
-
-          <div className="text-right">
-            <div className="text-sm font-medium text-gray-900">
+            <ul className="space-y-1">
+              {multiplayerData.players.map((p) => (
+                <li
+                  key={p.id}
+                  className={
+                    "text-sm flex items-center " +
+                    (p.name === playerName
+                      ? "text-blue-600 font-semibold"
+                      : "text-gray-800")
+                  }
+                >
+                  <span>{p.name}</span>
+                  {p.id === multiplayerData.hostId && (
+                    <span className="ml-1 text-xs text-gray-500 font-normal">
+                      (host)
+                    </span>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+        {gameMode === "solo" && (
+          <div className="flex flex-col min-w-[120px]">
+            <div className="text-sm font-medium text-gray-900 mb-1">
+              Player:
+            </div>
+            <span className="text-sm text-blue-600 font-semibold">
               {playerName}
-            </div>
-            {gameMode === "multiplayer" && sessionId && (
-              <div className="text-xs text-gray-500">
-                ID: {sessionId.slice(0, 8)}...
-              </div>
-            )}
+            </span>
           </div>
-        </div>
+        )}
       </div>
     </header>
   );

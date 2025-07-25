@@ -1,11 +1,14 @@
 import { memo } from "react";
 import { GameMode } from "../App";
+import { Button } from "./ui/button";
 
 interface GameLoadingStateProps {
   gameMode: GameMode;
   gameStarted: boolean;
   playerCount: number;
   isHost: boolean;
+  onStartGame: () => void;
+  gameCanStart: boolean;
 }
 
 export const GameLoadingState = memo(function GameLoadingState({
@@ -13,6 +16,8 @@ export const GameLoadingState = memo(function GameLoadingState({
   gameStarted,
   playerCount,
   isHost,
+  onStartGame,
+  gameCanStart,
 }: GameLoadingStateProps) {
   if (gameMode !== "multiplayer" || gameStarted) {
     return null;
@@ -30,9 +35,17 @@ export const GameLoadingState = memo(function GameLoadingState({
       ) : isHost ? (
         <div className="text-lg text-gray-600">
           <div>Ready to start!</div>
-          <div className="text-sm mt-2">
+          <div className="text-sm my-2">
             Click "Start Game" when you're both ready.
           </div>
+          {gameMode === "multiplayer" && isHost && gameCanStart && (
+            <Button
+              onClick={onStartGame}
+              className="bg-green-600 hover:bg-green-700 text-white"
+            >
+              Start Game
+            </Button>
+          )}
         </div>
       ) : (
         <div className="text-lg text-gray-600">

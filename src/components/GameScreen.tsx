@@ -14,10 +14,12 @@ const FIVE_LETTER_WORDS = words
   .filter((word) => word.length === 5)
   .map((word) => word.toUpperCase());
 
+// getRandomWord should only be called on mount or resetGame, not on every render
 function getRandomWord(): string {
-  return FIVE_LETTER_WORDS[
-    Math.floor(Math.random() * FIVE_LETTER_WORDS.length)
-  ];
+  const word =
+    FIVE_LETTER_WORDS[Math.floor(Math.random() * FIVE_LETTER_WORDS.length)];
+  console.log(word);
+  return word;
 }
 
 interface GameScreenProps {
@@ -35,13 +37,14 @@ export const GameScreen = memo(function GameScreen({
   sessionId,
   onBackToHome,
 }: GameScreenProps) {
-  const [gameState, setGameState] = useState<GameState>({
+  console.log("GameScreen mounted");
+  const [gameState, setGameState] = useState<GameState>(() => ({
     currentWord: getRandomWord(),
     guesses: [],
     currentGuess: "",
     gameStatus: "playing",
     maxGuesses: 6,
-  });
+  }));
 
   const [multiplayerData, setMultiplayerData] = useState<{
     players: Array<{
@@ -296,31 +299,42 @@ export const GameScreen = memo(function GameScreen({
         gameCanStart={gameCanStart}
       />
 
-      <div className="flex-1 flex flex-col items-center px-4 pt-2 pb-4 max-w-2xl mx-auto w-full">
+      <div className="flex-1 flex flex-col items-center pb-4 max-w-2xl mx-auto w-full">
         <GameLoadingState
           gameMode={gameMode}
           gameStarted={multiplayerData.gameStarted}
           playerCount={multiplayerData.players.length}
           isHost={isHost}
+          onStartGame={startGame}
+          gameCanStart={gameCanStart}
         />
 
         {gameInProgress && (
-          <div className="my-auto">
+          <div className="relative flex justify-center items-center my-auto">
             <GameBoard
               gameState={gameState}
               gameMode={gameMode}
               multiplayerData={multiplayerData}
             />
+            {(gameState.gameStatus !== "playing" ||
+              multiplayerData.gameEnded) && (
+              <div
+                className="absolute inset-0 flex items-center justify-center z-20 pointer-events-none bg-white/50"
+                style={{ pointerEvents: "none" }}
+              >
+                <div className="pointer-events-auto">
+                  <GameEndMessage
+                    gameMode={gameMode}
+                    gameState={gameState}
+                    multiplayerData={multiplayerData}
+                    playerName={playerName}
+                    onPlayAgain={resetGame}
+                  />
+                </div>
+              </div>
+            )}
           </div>
         )}
-
-        <GameEndMessage
-          gameMode={gameMode}
-          gameState={gameState}
-          multiplayerData={multiplayerData}
-          playerName={playerName}
-          onPlayAgain={resetGame}
-        />
 
         {gameInProgress && (
           <div className="mt-auto w-full">

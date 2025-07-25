@@ -48,7 +48,7 @@ const Tile = memo(function Tile({
   return (
     <div
       className={`
-        w-16 h-16 border-2 rounded-sm flex items-center justify-center
+        w-10 sm:w-12 md:w-16 aspect-square border-2 rounded-sm flex items-center justify-center
         text-xl font-bold uppercase transition-all duration-300
         ${getStatusClasses()}
         ${animate ? "animate-flip" : ""}
@@ -148,7 +148,7 @@ export const GameBoard = memo(function GameBoard({
 }: GameBoardProps) {
   if (gameMode === "solo") {
     return (
-      <div className="mb-6">
+      <div>
         <GameGrid gameState={gameState} />
       </div>
     );
@@ -163,7 +163,7 @@ export const GameBoard = memo(function GameBoard({
   );
 
   return (
-    <div className="mb-6 space-y-6">
+    <div>
       <div className="text-center">
         <GameGrid gameState={gameState} />
         {gameState.gameStatus === "won" && (

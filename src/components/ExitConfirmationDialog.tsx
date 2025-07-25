@@ -51,11 +51,11 @@ export const ExitConfirmationDialog = memo(function ExitConfirmationDialog({
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>
-          <Button variant="outline" onClick={() => setShowExitDialog(false)}>
-            Cancel
-          </Button>
           <Button variant="destructive" onClick={handleConfirmExit}>
             Exit Game
+          </Button>
+          <Button variant="outline" onClick={() => setShowExitDialog(false)}>
+            Cancel
           </Button>
         </DialogFooter>
       </DialogContent>

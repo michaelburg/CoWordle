@@ -1,7 +1,6 @@
-import { useState, useCallback, memo, useMemo } from "react";
+import { useState, useCallback, memo } from "react";
 import { generateSessionId } from "@/lib/utils";
 import { GameGrid } from "./GameBoard.tsx";
-import { Keyboard } from "./Keyboard.tsx";
 import { PlayerForm } from "./PlayerForm.tsx";
 import { useToast } from "@/hooks/use-toast";
 
@@ -11,22 +10,6 @@ interface HomeScreenProps {
   onJoinSession?: (name: string) => void;
   sessionId?: string | null;
 }
-
-const DecorativeGameGrid = memo(function DecorativeGameGrid() {
-  return (
-    <div className="mb-8 flex justify-center">
-      <GameGrid />
-    </div>
-  );
-});
-
-const DecorativeKeyboard = memo(function DecorativeKeyboard() {
-  return (
-    <div className="mt-8">
-      <Keyboard onKeyPress={() => {}} keyboardState={{}} disabled={true} />
-    </div>
-  );
-});
 
 export const HomeScreen = memo(function HomeScreen({
   onStartSolo,
@@ -76,28 +59,19 @@ export const HomeScreen = memo(function HomeScreen({
     }
   }, [playerName, onJoinSession]);
 
-  const headerText = useMemo(
-    () => ({
-      title: sessionId ? "Join the game!" : "Multiplayer Wordle Game",
-      sessionInfo: sessionId ? `Session: ${sessionId.slice(0, 8)}...` : null,
-    }),
-    [sessionId]
-  );
-
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-gray-900 mb-2">CoWordle</h1>
-          <p className="text-gray-600">{headerText.title}</p>
-          {headerText.sessionInfo && (
-            <p className="text-sm text-gray-500 mt-2">
-              {headerText.sessionInfo}
-            </p>
-          )}
+          <p className="text-gray-600">
+            {sessionId ? "Join the game!" : "Multiplayer Wordle Game"}
+          </p>
         </div>
 
-        <DecorativeGameGrid />
+        <div className="mb-8 flex justify-center">
+          <GameGrid />
+        </div>
 
         <PlayerForm
           playerName={playerName}
@@ -107,8 +81,6 @@ export const HomeScreen = memo(function HomeScreen({
           onJoinSession={handleJoinSession}
           sessionId={sessionId}
         />
-
-        <DecorativeKeyboard />
       </div>
     </div>
   );

@@ -50,14 +50,17 @@ const KeyboardKey = memo(function KeyboardKey({
     if (char === "BACKSPACE") {
       return "⌫";
     }
+    if (char === "ENTER") {
+      return "⏎";
+    }
     return char;
   };
 
   const getKeyWidth = () => {
     if (char === "ENTER" || char === "BACKSPACE") {
-      return "px-4 min-w-[60px]";
+      return "px-2 sm:px-4 flex-1 max-w-[64px] min-w-0";
     }
-    return "w-8";
+    return "w-8 flex-1 min-w-0";
   };
 
   return (
