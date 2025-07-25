@@ -51,14 +51,16 @@ export const GameHeader = memo(function GameHeader({
         {/* Left section */}
         <div className="flex flex-col w-auto max-w-max">
           <ExitConfirmationDialog onConfirmExit={onBackToHome} />
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={copySessionLink}
-            className="text-xs"
-          >
-            Copy Link
-          </Button>
+          {gameMode === "multiplayer" && (
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={copySessionLink}
+              className="text-xs"
+            >
+              Copy Link
+            </Button>
+          )}
         </div>
 
         {/* Center section */}
